@@ -9,10 +9,10 @@ import './styles/header.scss';
 
 document.getElementById('form').addEventListener('submit', handleSubmit);
 
-document.getElementById('form').addEventListener('submit', function (e) {
-	e.preventDefault();
-	let formInput = document.getElementById('url').value;
-	checkForName(formInput);
-});
+// document.getElementById('form').addEventListener('submit', function (e) {
+// 	e.preventDefault();
+// 	let formInput = document.getElementById('url').value;
+// 	checkForName(formInput);
+// });
 
 export { checkForName, handleSubmit };

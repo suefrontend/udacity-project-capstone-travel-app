@@ -14,23 +14,56 @@
 		<main>
 			<section>
 				<form id="form">
+					<label for="destination">Destination</label>
 					<input
-						id="url"
 						type="text"
-						name="input"
-						value=""
-						placeholder="Enter URL here"
+						placeholder="Place of Origin"
+						name="origin"
+						id="origin"
+						required
 					/>
+					<input
+						type="text"
+						placeholder="Destination"
+						name="destination"
+						id="destination"
+						required
+					/>
+					<label for="date">Departing on:</label>
+					<input type="date" name="date" id="destinationDate" />
 					<input type="submit" name="" value="submit" />
 				</form>
 			</section>
 
-			<section>
-				<strong>Form Results:</strong>
-				<div id="agreement"></div>
-				<div id="subjectivity"></div>
-				<div id="confidence"></div>
-				<div id="irony"></div>
+			<section id="result-section" class="hidden">
+				<div class="result-container">
+					<div class="result-left">
+						<img id="destination-img" src="#" alt="destination-img" />
+					</div>
+					<div class="result-right">
+						<h2 class="destination-text">
+							Destination:
+							<span id="city" class="result-underline">New York</span>
+						</h2>
+						<h2 class="destination-date">
+							Departing on:
+							<span id="date" class="result-underline">DD/MM/YYYY</span>
+						</h2>
+						<h2 class="destination-countdown">
+							This trip is
+							<span id="days-left" class="result-underline">32</span>
+							days away
+						</h2>
+						<h2 class="local-weather">
+							Local weather is:
+							<span id="destination-weather" class="result-underline">54</span>
+							&#176; F
+						</h2>
+						<div class="result-btn-container">
+							<a id="delete-btn" href="#">Delete</a>
+						</div>
+					</div>
+				</div>
 			</section>
 		</main>
 
