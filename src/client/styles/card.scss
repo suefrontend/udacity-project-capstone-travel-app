@@ -5,7 +5,11 @@
 	.card {
 		display: flex;
 		align-items: center;
-		border: 1px solid #000;
+		border: 1px solid #ccc;
+
+		&:not(:last-child) {
+			margin-bottom: 10px;
+		}
 
 		&__content {
 			margin-left: 20px;
@@ -14,7 +18,6 @@
 
 		&__img {
 			width: 50%;
-			border: 1px solid red;
 
 			figure {
 				img {

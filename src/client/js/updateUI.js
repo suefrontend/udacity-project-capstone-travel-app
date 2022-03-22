@@ -1,13 +1,7 @@
-export const updateUI = async (userInput) => {
-	console.log('userInput', userInput);
-
+export const renderModal = async (userInput) => {
 	document.querySelector('.modal').style.display = 'block';
-	// const res = await fetch(
-	// 	`https://pixabay.com/api/?key=${api}&q=${userInput.arrCity}+city&image_type=photo`
-	// );
 
 	try {
-		// const image = await res.json();
 		const formatDateDeparting = userInput.depDate
 			.split('_')
 			.reverse()
@@ -17,8 +11,6 @@ export const updateUI = async (userInput) => {
 			.reverse()
 			.join(' / ');
 
-		// .querySelector('#destination-img')
-		// .setAttribute('src', image.hits[0].webformatURL);
 		document
 			.querySelector('#destination-img')
 			.setAttribute('src', userInput.tripImage);
@@ -40,4 +32,31 @@ export const updateUI = async (userInput) => {
 	} catch (error) {
 		console.log('error', error);
 	}
+};
+
+export const closeModal = () => {
+	document.querySelector('.modal').style.display = 'none';
+};
+export const renderSavedTrip = async (trip) => {
+	let markup = `
+	      <div class="card">
+	        <div class="card__img">
+	          <figure><img src=${trip.tripImage} alt=${trip.destination} /></figure>
+	        </div>
+	        <div class="card__content">
+	          <p class="bold">My trip to: ${trip.destination}</p>
+	          <p class="bold">Departing: ${trip.depDate}</p>
+	          <p class="bold">Returning: ${trip.retDate}</p>
+	          <p>Length of trip: ${trip.tripLength} days</p>
+
+	          <p>Your travel is ${trip.daysLeft} away</p>
+	          <p>Typical weather for then is:</p>
+	          <p>High ${trip.highTemp}, Low ${trip.lowTemp}</p>
+	          <p>${trip.weather}</p>
+	        </div>
+	      </div>
+	    `;
+
+	document.querySelector('.cards').insertAdjacentHTML('afterbegin', markup);
+	closeModal();
 };

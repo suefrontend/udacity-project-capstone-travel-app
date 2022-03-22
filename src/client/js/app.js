@@ -1,100 +1,79 @@
-import { saveTrip } from './saveTrip';
-import { updateUI } from './updateUI';
+import { renderModal, renderSavedTrip } from './updateUI';
 
 const geoNamesKey = 'kaya0312';
 const weatherBitApiKey = '164014afe4334428a208da61da810de3';
 const pixabayApiKey = '26229455-f26c341619c4e41b25358fe40';
 
-const timestampNow = Date.now() / 1000;
-
 const trip = {};
 
-const handleSubmit = async (event) => {
+export const handleSubmit = async (event) => {
 	event.preventDefault();
 
-	// const origin = document.getElementById('origin').value;
-	const destination = document.getElementById('destination').value;
-	const departingDate = document.querySelector(
-		'input[name="departing-date"]'
-	).value;
-	const returningDate = document.querySelector(
-		'input[name="returning-date"]'
-	).value;
-	const tripLength =
-		returningDate.split('-').join('') - departingDate.split('-').join('');
-	console.log('tripLength', tripLength);
+	try {
+		// Get form values
+		const destination = document.getElementById('destination').value;
+		const departingDate = document.querySelector(
+			'input[name="departing-date"]'
+		).value;
+		const returningDate = document.querySelector(
+			'input[name="returning-date"]'
+		).value;
 
-	const timestamp = new Date(departingDate).getTime() / 1000;
+		// Format date
+		const departingDateFormat = departingDate.split('-').join('');
+		const returningDateFormat = returningDate.split('-').join('');
 
-	const geoData = await getGeoDetails(destination);
+		const tripLength = returningDateFormat - departingDateFormat;
 
-	// .then((data) => {
-	const lat = geoData.geonames[0].lat;
+		// Validation for returning date
+		if (departingDateFormat > returningDateFormat) {
+			alert('Returning date must be later than departing date');
+			return;
+		}
 
-	const long = geoData.geonames[0].lng;
-	const country = geoData.geonames[0].countryName;
+		const timestamp = new Date(departingDate).getTime() / 1000;
+		const timestampNow = Date.now() / 1000;
+		const daysLeft = Math.round((timestamp - timestampNow) / 86400);
 
-	// console.log(lat, long, country);
+		// Get geo date
+		const geoData = await getGeoDetails(destination);
 
-	const weatherData = await getWeatherData(lat, long, country, timestamp);
+		const lat = geoData.geonames[0].lat;
+		const long = geoData.geonames[0].lng;
+		const country = geoData.geonames[0].countryName;
 
-	const image = await getImage(pixabayApiKey, destination);
+		// Get weather data
+		const weatherData = await getWeatherData(lat, long, country, timestamp);
 
-	// 	const weatherData = getWeatherData(lat, long, country, timestamp);
-	// 	return weatherData;
-	// })
-	// .then((weatherData) => {
-	// 	const image = getImage(pixabayApiKey, destination);
-	// 	console.log('image', image);
-	// 	return image;
-	// })
+		let highTemp = weatherData.data[0].max_temp;
+		let lowTemp = weatherData.data[0].min_temp;
+		let weather = weatherData.data[0].weather.description;
 
-	// .then((image) => {
+		// Get image of destination city
+		const image = await getImage(pixabayApiKey, destination);
 
-	// const lowTemp = weatherData
-	console.log('weatherData', weatherData.data);
-	let highTemp = weatherData.data[0].max_temp;
-	let lowTemp = weatherData.data[0].min_temp;
-	let weather = weatherData.data[0].weather.description;
-	console.log('weather', weather);
+		// Set trip
+		trip.destination = destination;
+		trip.depDate = departingDate;
+		trip.daysLeft = daysLeft;
+		trip.tripImage = image.hits[0].webformatURL;
+		trip.highTemp = highTemp;
+		trip.lowTemp = lowTemp;
+		trip.weather = weather;
+		trip.retDate = returningDate;
+		trip.tripLength = tripLength;
 
-	const daysLeft = Math.round((timestamp - timestampNow) / 86400);
-	// 	console.log('image', image);
-	// const userInput = postData('http://localhost:3000/add', {
-	// 	origin,
-	// 	destination,
-	// 	departingDate,
-	// 	weather: (weatherData.data[15].temp * 9) / 5 + 32,
-	// 	daysLeft,
-	// 	tripImage,
-	// });
+		renderModal(trip);
 
-	trip.destination = destination;
-	trip.depDate = departingDate;
-	// trip.weather = (weatherData.data[15].temp * 9) / 5 + 32;
-	// trip.temperature = weatherData.data[15].temp;
-	trip.daysLeft = daysLeft;
-	trip.tripImage = image.hits[0].webformatURL;
+		// Empty inputs after submission
+		document.getElementById('destination').value = '';
+		document.querySelector('input[name="departing-date"]').value = '';
+		document.querySelector('input[name="returning-date"]').value = '';
 
-	trip.highTemp = highTemp;
-	trip.lowTemp = lowTemp;
-	trip.weather = weather;
-
-	trip.retDate = returningDate;
-	trip.tripLength = tripLength;
-
-	console.log('departingDate', departingDate);
-	// return userInput;
-	// })
-	// .then((userInput) => {
-	updateUI(trip);
-	// localStorage.setItem(localStorage.length, JSON.stringify(await userInput));
-	// saveTrip(await userInput);
-	// });
-
-	document.getElementById('destination').value = '';
-	document.querySelector('input[name="departing-date"]').value = '';
-	document.querySelector('input[name="returning-date"]').value = '';
+		return trip;
+	} catch (error) {
+		alert('Please enter valid destination');
+	}
 };
 
 const getGeoDetails = async (destination) => {
@@ -132,124 +111,32 @@ const getImage = async (api, destination) => {
 		console.log('Error: ', error);
 	}
 };
+export async function handleSaveTrip(e) {
+	e.preventDefault();
+	console.log('trip', trip);
 
-const addTrip = async () => {
-	const response = await fetch('http://localhost:3000/save', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			arrCity: trip.destination,
-			depDate: trip.departingDate,
-			daysLeft: trip.daysLeft,
-			tripImage: trip.tripImage,
-
-			weather: trip.weather,
-			lowTemp: trip.lowTemp,
-			highTemp: trip.highTemp,
-
-			returningDate: trip.retDate,
-			tripLength: trip.tripLength,
-		}),
-	});
-	console.log('response', response);
 	try {
-		const userInput = await response.json();
-		console.log('userInput', userInput);
-		renderSavedTripRelatedFunction(userInput.destination);
-		return userInput;
-		// console.log('response', response);
-		// if (response.ok) {
-		// 	console.log('OK');
-		// 	const jsonRes = await response.json();
-		// 	// displayTrip(jsonRes);
-		// 	return jsonRes;
-		// }
+		const response = await fetch('http://localhost:3000/save', {
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Content-Type': 'application/json;charset=UTF-8',
+			},
+			body: JSON.stringify({ trip: trip }),
+		});
+
+		if (!response.ok) {
+			return null;
+		}
+
+		let savedTrips = await response.json();
+
+		const newTrip = savedTrips[savedTrips.length - 1];
+
+		renderSavedTrip(newTrip);
+
+		return savedTrips;
 	} catch (error) {
 		console.log(error);
 	}
-};
-
-const renderSavedTripRelatedFunction = () => {
-	console.log('trip', trip);
-
-	// addTrip();
-
-	// document.querySelector('.cards').innerHTML = '';
-
-	let markup;
-
-	markup = `
-	      <div class="card">
-	        <div class="card__img">
-	          <figure><img src=${trip.tripImage} alt="" /></figure>
-	        </div>
-	        <div class="card__content">
-	          <p>My trip to: ${trip.destination}</p>
-	          <p>Departing: ${trip.depDate}</p>
-	          <p>Returning: ${trip.retDate}</p>
-	          <p>Length of trip: ${trip.tripLength} days</p>
-
-	          <p>Your travel is ${trip.daysLeft} away</p>
-	          <p>Typical weather for then is:</p>
-	          <p>High ${trip.highTemp}, Low ${trip.lowTemp}</p>
-	          <p>${trip.weather}</p>
-	        </div>
-	      </div>
-	    `;
-
-	document.querySelector('.cards').insertAdjacentHTML('afterbegin', markup);
-	closeModal();
-};
-
-const closeModal = () => {
-	document.querySelector('.modal').style.display = 'none';
-};
-
-const displayTrip = (trip) => {
-	document.querySelector('.modal').style.display = 'none';
-};
-
-const saveTripBtn = document.getElementById('save-btn');
-saveTripBtn.addEventListener('click', renderSavedTripRelatedFunction);
-
-const closeBtn = document.getElementById('close-btn');
-closeBtn.addEventListener('click', closeModal);
-
-window.addEventListener('load', async function () {
-	const res = await fetch('http://localhost:3000/all');
-
-	try {
-		const data = await res.json();
-		rendering(data);
-		console.log('data', data);
-	} catch (e) {
-		console.log('error', e);
-	}
-});
-
-const rendering = (test) => {
-	let markup;
-
-	test.map((el) => {
-		markup = `
-      <div class="card">
-        <div class="card__img">
-          <figure><img src=${el.tripImage} alt="" /></figure>
-        </div>
-        <div class="card__content">
-          <p>My trip to: ${el.arrCity}</p>
-          <p>Departing: ${el.depDate}</p>
-
-          <p>Your travel is ${el.daysLeft} away</p>
-          <p>Typical weather for then is:</p>
-          <p>High ${el.highTemp}, Low ${el.lowTemp}</p>
-          <p>${el.weather}</p>
-        </div>
-      </div>
-    `;
-
-		document.querySelector('.cards').insertAdjacentHTML('afterbegin', markup);
-	});
-};
-
-export { handleSubmit };
+}

@@ -19,35 +19,20 @@ app.get('/', function (req, res) {
 	res.sendFile(path.resolve('dist/index.html'));
 });
 
-app.get('/all', (req, res) => {
-	res.send(arr);
-});
-
-app.post('/add', function (req, res) {
-	// projectData['depCity'] = req.body.depCity;
-	// projectData['arrCity'] = req.body.arrCity;
-	// projectData['depDate'] = req.body.depDate;
-	// projectData['weather'] = req.body.weather;
-	// projectData['daysLeft'] = req.body.daysLeft;
+app.get('/all', function (req, res) {
 	res.send(arr);
 });
 
 app.post('/save', function (req, res) {
-	projectData = {
-		tripImage: req.body.tripImage,
-		arrCity: req.body.arrCity,
-		depDate: req.body.depDate,
-		retDate: req.body.retDate,
-		tripLength: req.body.tripLength,
-		weather: req.body.weather,
-		daysLeft: req.body.daysLeft,
-		lowTemp: req.body.lowTemp,
-		highTemp: req.body.highTemp,
-	};
+	const reqBody = req.body;
 
-	arr.push(projectData);
+	if (!reqBody || !reqBody.trip) {
+		return status(400).send('Invalid Request');
+	}
 
-	res.send(arr);
+	arr.push(reqBody.trip);
+
+	res.status(200).send(arr);
 });
 
 // Setup Server

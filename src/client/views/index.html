@@ -12,77 +12,86 @@
 		</header>
 
 		<main>
-			<section>
-				<form id="form">
-					<label for="destination">Destination</label>
-					<input
-						type="text"
-						placeholder="Destination"
-						name="destination"
-						id="destination"
-						required
-					/>
-					<label for="destinationDate">Departing on:</label>
-					<input type="date" name="departing-date" id="destinationDate" />
-					<label for="returningDate">Returning on:</label>
-					<input type="date" name="returning-date" id="returningDate" />
-					<input type="submit" name="" value="submit" />
-				</form>
+			<section class="hero">
+				<div class="container">
+					<div class="trip-form">
+						<form id="form">
+							<label for="destination">Destination</label>
+							<input
+								type="text"
+								placeholder="Destination"
+								name="destination"
+								id="destination"
+								required
+							/>
+							<label for="destinationDate">Departing on:</label>
+							<input
+								type="date"
+								name="departing-date"
+								id="destinationDate"
+								required
+							/>
+							<label for="returningDate">Returning on:</label>
+							<input
+								type="date"
+								name="returning-date"
+								id="returningDate"
+								required
+							/>
+							<input
+								class="btn btn-primary"
+								type="submit"
+								name=""
+								value="submit"
+							/>
+						</form>
+					</div>
+				</div>
 			</section>
 
-			<section id="result-section" class="modal">
+			<div id="result-section" class="modal">
 				<div class="result-container modal-content">
 					<div class="result-left">
 						<img id="destination-img" src="#" alt="destination-img" />
 					</div>
 					<div class="result-right">
-						<h2 class="destination-text">
-							Destination:
-							<span id="city" class="result-underline"></span>
-						</h2>
-						<h2 class="departing-date">
-							Departing on:
-							<span id="departing-date" class="result-underline"
-								>DD/MM/YYYY</span
-							>
-						</h2>
-						<h2 class="returning-date">
-							Returning on:
-							<span id="returning-date" class="result-underline"
-								>DD/MM/YYYY</span
-							>
-						</h2>
-						<h2 class="trip-length">
-							Length of your trip:
-							<span id="trip-length" class="result-underline">XX days</span>
-						</h2>
-						<h2 class="destination-countdown">
+						<h3 class="destination-text">Destination:</h3>
+						<span id="city" class="result-underline"></span>
+
+						<h3 class="departing-date">Departing on:</h3>
+						<span id="departing-date" class="result-underline">DD/MM/YYYY</span>
+
+						<h3 class="returning-date">Returning on:</h3>
+						<span id="returning-date" class="result-underline">DD/MM/YYYY</span>
+
+						<h3 class="trip-length">Length of your trip:</h3>
+						<span id="trip-length" class="result-underline">XX days</span>
+
+						<h3 class="destination-countdown">
 							This trip is
 							<span id="days-left" class="result-underline"></span>
 							days away
-						</h2>
-						<h2 class="local-weather">
-							Typical weather for then is:
-							<span id="destination-weather" class="result-underline"></span>
-							<span id="destination-temperature-high" class="result-underline"
-								>High:
-							</span>
-							&#176; C
-							<span id="destination-temperature-low" class="result-underline"
-								>Low:
-							</span>
-							&#176; C
-						</h2>
+						</h3>
+						<h3 class="local-weather">Typical weather for then is:</h3>
+						<span id="destination-weather" class="result-underline"></span>
+						<span id="destination-temperature-high" class="result-underline"
+							>High:
+						</span>
+						&#176; C
+						<span id="destination-temperature-low" class="result-underline"
+							>Low:
+						</span>
+						&#176; C
 
 						<div class="result-btn-container">
-							<a id="close-btn" href="#">Done</a>
-							<a id="save-btn" href="#">Save</a>
+							<a id="close-btn" class="btn btn-gray" href="#">Done</a>
+							<a id="save-btn" class="btn btn-primary" href="#">Save</a>
 						</div>
 					</div>
 				</div>
-			</section>
+			</div>
 
-			<section class="cards"></section>
+			<section class="cards container"></section>
 		</main>
 
 		<footer class="footer">
