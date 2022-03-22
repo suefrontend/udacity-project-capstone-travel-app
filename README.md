@@ -29,7 +29,7 @@ $ npm run build-prod
 $ npm run start
 ```
 
-The app will be running in your browser on [localhost:8081](http://localhost:8081)
+The app will be running in your browser on [localhost:3000](http://localhost:3000)
 
 # Development mode
 
