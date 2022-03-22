@@ -1,5 +1,7 @@
 export const updateUI = async (userInput) => {
 	console.log('userInput', userInput);
+
+	document.querySelector('.modal').style.display = 'block';
 	// const res = await fetch(
 	// 	`https://pixabay.com/api/?key=${api}&q=${userInput.arrCity}+city&image_type=photo`
 	// );
