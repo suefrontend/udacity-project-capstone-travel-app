@@ -17,20 +17,15 @@
 					<label for="destination">Destination</label>
 					<input
 						type="text"
-						placeholder="Place of Origin"
-						name="origin"
-						id="origin"
-						required
-					/>
-					<input
-						type="text"
 						placeholder="Destination"
 						name="destination"
 						id="destination"
 						required
 					/>
-					<label for="date">Departing on:</label>
-					<input type="date" name="date" id="destinationDate" />
+					<label for="destinationDate">Departing on:</label>
+					<input type="date" name="departing-date" id="destinationDate" />
+					<label for="returningDate">Returning on:</label>
+					<input type="date" name="returning-date" id="returningDate" />
 					<input type="submit" name="" value="submit" />
 				</form>
 			</section>
@@ -43,22 +38,42 @@
 					<div class="result-right">
 						<h2 class="destination-text">
 							Destination:
-							<span id="city" class="result-underline">New York</span>
+							<span id="city" class="result-underline"></span>
 						</h2>
-						<h2 class="destination-date">
+						<h2 class="departing-date">
 							Departing on:
-							<span id="date" class="result-underline">DD/MM/YYYY</span>
+							<span id="departing-date" class="result-underline"
+								>DD/MM/YYYY</span
+							>
+						</h2>
+						<h2 class="returning-date">
+							Returning on:
+							<span id="returning-date" class="result-underline"
+								>DD/MM/YYYY</span
+							>
+						</h2>
+						<h2 class="trip-length">
+							Length of your trip:
+							<span id="trip-length" class="result-underline">XX days</span>
 						</h2>
 						<h2 class="destination-countdown">
 							This trip is
-							<span id="days-left" class="result-underline">32</span>
+							<span id="days-left" class="result-underline"></span>
 							days away
 						</h2>
 						<h2 class="local-weather">
-							Local weather is:
-							<span id="destination-weather" class="result-underline">54</span>
-							&#176; F
+							Typical weather for then is:
+							<span id="destination-weather" class="result-underline"></span>
+							<span id="destination-temperature-high" class="result-underline"
+								>High:
+							</span>
+							&#176; C
+							<span id="destination-temperature-low" class="result-underline"
+								>Low:
+							</span>
+							&#176; C
 						</h2>
+
 						<div class="result-btn-container">
 							<a id="close-btn" href="#">Done</a>
 							<a id="save-btn" href="#">Save</a>
@@ -67,7 +82,7 @@
 				</div>
 			</section>
 
-			<section class="trips"></section>
+			<section class="cards"></section>
 		</main>
 
 		<footer class="footer">

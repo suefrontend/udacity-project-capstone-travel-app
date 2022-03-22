@@ -8,16 +8,33 @@ export const updateUI = async (userInput) => {
 
 	try {
 		// const image = await res.json();
-		const formatDate = userInput.depDate.split('_').reverse().join(' / ');
+		const formatDateDeparting = userInput.depDate
+			.split('_')
+			.reverse()
+			.join(' / ');
+		const formatDateReturning = userInput.retDate
+			.split('_')
+			.reverse()
+			.join(' / ');
 
 		// .querySelector('#destination-img')
 		// .setAttribute('src', image.hits[0].webformatURL);
 		document
 			.querySelector('#destination-img')
 			.setAttribute('src', userInput.tripImage);
-		document.getElementById('city').innerHTML = userInput.arrCity;
-		document.getElementById('date').innerHTML = formatDate;
+		document.getElementById('city').innerHTML = userInput.destination;
+
+		document.getElementById('departing-date').innerHTML = formatDateDeparting;
+		document.getElementById('returning-date').innerHTML = formatDateReturning;
+
+		document.getElementById('trip-length').innerHTML =
+			userInput.tripLength + ' days';
+
 		document.getElementById('days-left').innerHTML = userInput.daysLeft;
+		document.getElementById('destination-temperature-high').innerHTML =
+			userInput.highTemp;
+		document.getElementById('destination-temperature-low').innerHTML =
+			userInput.lowTemp;
 		document.getElementById('destination-weather').innerHTML =
 			userInput.weather;
 	} catch (error) {

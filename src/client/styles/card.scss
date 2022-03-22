@@ -1,0 +1,27 @@
+.cards {
+	display: flex;
+	flex-wrap: wrap;
+
+	.card {
+		display: flex;
+		align-items: center;
+		border: 1px solid #000;
+
+		&__content {
+			margin-left: 20px;
+			line-height: 1.6;
+		}
+
+		&__img {
+			width: 50%;
+			border: 1px solid red;
+
+			figure {
+				img {
+					width: 100%;
+					height: auto;
+				}
+			}
+		}
+	}
+}

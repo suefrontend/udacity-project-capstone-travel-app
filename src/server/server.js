@@ -33,14 +33,16 @@ app.post('/add', function (req, res) {
 });
 
 app.post('/save', function (req, res) {
-	console.log('req.body.depCity', req.body.depCity);
 	projectData = {
-		depCity: req.body.depCity,
+		tripImage: req.body.tripImage,
 		arrCity: req.body.arrCity,
 		depDate: req.body.depDate,
+		retDate: req.body.retDate,
+		tripLength: req.body.tripLength,
 		weather: req.body.weather,
 		daysLeft: req.body.daysLeft,
-		tripImage: req.body.tripImage,
+		lowTemp: req.body.lowTemp,
+		highTemp: req.body.highTemp,
 	};
 
 	arr.push(projectData);

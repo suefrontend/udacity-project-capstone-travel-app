@@ -12,9 +12,18 @@ const trip = {};
 const handleSubmit = async (event) => {
 	event.preventDefault();
 
-	const origin = document.getElementById('origin').value;
+	// const origin = document.getElementById('origin').value;
 	const destination = document.getElementById('destination').value;
-	const departingDate = document.querySelector('input[name="date"]').value;
+	const departingDate = document.querySelector(
+		'input[name="departing-date"]'
+	).value;
+	const returningDate = document.querySelector(
+		'input[name="returning-date"]'
+	).value;
+	const tripLength =
+		returningDate.split('-').join('') - departingDate.split('-').join('');
+	console.log('tripLength', tripLength);
+
 	const timestamp = new Date(departingDate).getTime() / 1000;
 
 	const geoData = await getGeoDetails(destination);
@@ -41,6 +50,14 @@ const handleSubmit = async (event) => {
 	// })
 
 	// .then((image) => {
+
+	// const lowTemp = weatherData
+	console.log('weatherData', weatherData.data);
+	let highTemp = weatherData.data[0].max_temp;
+	let lowTemp = weatherData.data[0].min_temp;
+	let weather = weatherData.data[0].weather.description;
+	console.log('weather', weather);
+
 	const daysLeft = Math.round((timestamp - timestampNow) / 86400);
 	// 	console.log('image', image);
 	// const userInput = postData('http://localhost:3000/add', {
@@ -52,15 +69,21 @@ const handleSubmit = async (event) => {
 	// 	tripImage,
 	// });
 
-	trip.origin = origin;
 	trip.destination = destination;
 	trip.depDate = departingDate;
 	// trip.weather = (weatherData.data[15].temp * 9) / 5 + 32;
-	trip.temperature = weatherData.data[15].temp;
+	// trip.temperature = weatherData.data[15].temp;
 	trip.daysLeft = daysLeft;
 	trip.tripImage = image.hits[0].webformatURL;
 
-	console.log('trip', trip);
+	trip.highTemp = highTemp;
+	trip.lowTemp = lowTemp;
+	trip.weather = weather;
+
+	trip.retDate = returningDate;
+	trip.tripLength = tripLength;
+
+	console.log('departingDate', departingDate);
 	// return userInput;
 	// })
 	// .then((userInput) => {
@@ -68,6 +91,10 @@ const handleSubmit = async (event) => {
 	// localStorage.setItem(localStorage.length, JSON.stringify(await userInput));
 	// saveTrip(await userInput);
 	// });
+
+	document.getElementById('destination').value = '';
+	document.querySelector('input[name="departing-date"]').value = '';
+	document.querySelector('input[name="returning-date"]').value = '';
 };
 
 const getGeoDetails = async (destination) => {
@@ -106,49 +133,29 @@ const getImage = async (api, destination) => {
 	}
 };
 
-const addTrip = async (event) => {
-	event.preventDefault();
-	// const req = await fetch(url, {
-	// 	method: 'POST',
-	// 	credentials: 'same-origin',
-	// 	headers: {
-	// 		'Content-Type': 'application/json;charset=UTF-8',
-	// 	},
-	// 	body: JSON.stringify({
-	// 		depCity: data.origin,
-	// 		arrCity: data.destination,
-	// 		depDate: data.departingDate,
-	// 		weather: data.weather,
-	// 		daysLeft: data.daysLeft,
-	// 		tripImage: data.tripImage,
-	// 	}),
-	// });
-	// try {
-	// 	const userInput = await req.json();
-	// 	console.log('userInput', userInput);
-	// 	return userInput;
-	// } catch (error) {
-	// 	console.log('error'), error;
-	// }
-
-	console.log('OK');
+const addTrip = async () => {
 	const response = await fetch('http://localhost:3000/save', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({
-			depCity: trip.origin,
 			arrCity: trip.destination,
 			depDate: trip.departingDate,
-			weather: trip.weather,
 			daysLeft: trip.daysLeft,
 			tripImage: trip.tripImage,
+
+			weather: trip.weather,
+			lowTemp: trip.lowTemp,
+			highTemp: trip.highTemp,
+
+			returningDate: trip.retDate,
+			tripLength: trip.tripLength,
 		}),
 	});
 	console.log('response', response);
 	try {
 		const userInput = await response.json();
 		console.log('userInput', userInput);
-		renderSavedTrips(userInput);
+		renderSavedTripRelatedFunction(userInput.destination);
 		return userInput;
 		// console.log('response', response);
 		// if (response.ok) {
@@ -162,50 +169,87 @@ const addTrip = async (event) => {
 	}
 };
 
-// const addTrip = async () => {
-// 	const res = await fetch('http://localhost:3000/all');
-// 	try {
-// 		const data = await res.json();
-// 		console.log('data', data);
-// 	} catch (e) {
-// 		console.log('error', e);
-// 	}
-// };
+const renderSavedTripRelatedFunction = () => {
+	console.log('trip', trip);
+
+	// addTrip();
+
+	// document.querySelector('.cards').innerHTML = '';
+
+	let markup;
+
+	markup = `
+	      <div class="card">
+	        <div class="card__img">
+	          <figure><img src=${trip.tripImage} alt="" /></figure>
+	        </div>
+	        <div class="card__content">
+	          <p>My trip to: ${trip.destination}</p>
+	          <p>Departing: ${trip.depDate}</p>
+	          <p>Returning: ${trip.retDate}</p>
+	          <p>Length of trip: ${trip.tripLength} days</p>
+
+	          <p>Your travel is ${trip.daysLeft} away</p>
+	          <p>Typical weather for then is:</p>
+	          <p>High ${trip.highTemp}, Low ${trip.lowTemp}</p>
+	          <p>${trip.weather}</p>
+	        </div>
+	      </div>
+	    `;
+
+	document.querySelector('.cards').insertAdjacentHTML('afterbegin', markup);
+	closeModal();
+};
 
 const closeModal = () => {
 	document.querySelector('.modal').style.display = 'none';
 };
 
-const renderSavedTrips = () => {
+const displayTrip = (trip) => {
 	document.querySelector('.modal').style.display = 'none';
-
-	const section = document.createElement('section');
-	section.classList.add('trips');
-
-	const div = document.createElement('div');
-
-	div.innerHTML = `
-  <div class="card mb-3" style="max-width: 768px; margin: 0 auto">
-    <div class="row no-gutters">
-      <div class="col-md-4">
-        <img src="${trip.tripImage}" class="card-img" alt="Picture of Travel Destination">
-      </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <span class="trip_countdown">Your trip to ${trip.destination} is days away</span>
-        </div>
-      </div>
-    </div>
-  </div>`;
-
-	section.appendChild(div);
-	document.querySelector('.trips').appendChild(section);
 };
 
 const saveTripBtn = document.getElementById('save-btn');
-saveTripBtn.addEventListener('click', addTrip);
+saveTripBtn.addEventListener('click', renderSavedTripRelatedFunction);
 
 const closeBtn = document.getElementById('close-btn');
 closeBtn.addEventListener('click', closeModal);
+
+window.addEventListener('load', async function () {
+	const res = await fetch('http://localhost:3000/all');
+
+	try {
+		const data = await res.json();
+		rendering(data);
+		console.log('data', data);
+	} catch (e) {
+		console.log('error', e);
+	}
+});
+
+const rendering = (test) => {
+	let markup;
+
+	test.map((el) => {
+		markup = `
+      <div class="card">
+        <div class="card__img">
+          <figure><img src=${el.tripImage} alt="" /></figure>
+        </div>
+        <div class="card__content">
+          <p>My trip to: ${el.arrCity}</p>
+          <p>Departing: ${el.depDate}</p>
+
+          <p>Your travel is ${el.daysLeft} away</p>
+          <p>Typical weather for then is:</p>
+          <p>High ${el.highTemp}, Low ${el.lowTemp}</p>
+          <p>${el.weather}</p>
+        </div>
+      </div>
+    `;
+
+		document.querySelector('.cards').insertAdjacentHTML('afterbegin', markup);
+	});
+};
 
 export { handleSubmit };
