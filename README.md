@@ -1,8 +1,16 @@
 # Overview
 
-This is the 4th project at [Udacity](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd0011) Front End Web Developer Nanodegree program.
+This is the final assignment for [Udacity](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd0011) Front End Web Developer Nanodegree program.
 
-This project aims to build a web tool that allows users to run Natural Language Processing (NLP) on articles or blogs found on other websites. When a user submits a URL of an article, the web page dispalys sentiment analysis returned from [meaningcloud API](https://www.meaningcloud.com/products/sentiment-analysis), based on the contents of the article.
+The project includes a form where you enter the location you are traveling to and the date you are leaving. You will get the current weather forecast or a predicted forecast.
+
+## API
+
+This project uses the following APIs:
+
+- [Geonames](http://www.geonames.org/export/web-services.html)
+- [Weatherbit](https://www.weatherbit.io/account/create)
+- [Pixabay](https://pixabay.com/api/docs/)
 
 ## Gettging Started
 
@@ -22,15 +30,6 @@ $ npm run start
 ```
 
 The app will be running in your browser on [localhost:8081](http://localhost:8081)
-
-# API Key
-
-Visit [here](https://www.meaningcloud.com/developer/) and register for an account. You will get you an API key once you sign up.
-
-At the root of the project, create a new file named .env.
-Inside the file, add the following line. Replacing the stars with your personal API key.
-
-API_KEY=\***\*\*\*\*\*\*\***\*\*\***\*\*\*\*\*\*\***
 
 # Development mode
 
