@@ -5,6 +5,10 @@
 	text-transform: capitalize;
 	text-decoration: none;
 	cursor: pointer;
+
+	&:hover {
+		opacity: 0.8;
+	}
 }
 .btn-primary {
 	background-color: rgb(29, 155, 240);
